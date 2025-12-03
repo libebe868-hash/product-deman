@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>德曼产品分析看板</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-chart-line"></i> 德曼产品分析看板
+            </a>
+            <div class="navbar-text">
+                <span class="badge bg-warning">数据周期: 2023年2月-11月</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="container-fluid mt-4">
+        <!-- KPI指标卡片 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-money-bill-wave"></i> 总销售额</h5>
+                        <h2 class="card-value" id="total-sales">¥ 0</h2>
+                        <p class="card-change text-success">
+                            <i class="fas fa-arrow-up"></i> 环比增长: <span id="sales-growth">0%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-users"></i> 总买家数</h5>
+                        <h2 class="card-value" id="total-buyers">0</h2>
+                        <p class="card-change text-primary">
+                            <i class="fas fa-user-plus"></i> 新买家: <span id="new-buyers">0</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-percentage"></i> 平均转化率</h5>
+                        <h2 class="card-value" id="avg-conversion">0%</h2>
+                        <p class="card-change text-info">
+                            <i class="fas fa-exchange-alt"></i> 点击转化: <span id="click-conversion">0%</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-ad"></i> 广告花费占比</h5>
+                        <h2 class="card-value" id="ad-ratio">0%</h2>
+                        <p class="card-change text-warning">
+                            <i class="fas fa-eye"></i> 展现次数: <span id="total-impressions">0</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要图表区域 -->
+        <div class="row">
+            <!-- 左侧：产品型号分析 -->
+            <div class="col-md-8">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-pie"></i> 产品型号销售额占比</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary active" onclick="changeChartType('sales')">销售额</button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="changeChartType('quantity')">销售量</button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="changeChartType('buyers')">买家数</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="model-pie-chart" style="height: 400px;"></div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-bar"></i> 型号销售额排行</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="model-bar-chart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-bullseye"></i> 转化率排行</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="conversion-chart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：产品列表和详情 -->
+            <div class="col-md-4">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-crown"></i> 热销产品TOP 10</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>型号</th>
+                                        <th>销售额</th>
+                                        <th>转化率</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-products">
+                                    <!-- 动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card chart-card mt-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-ad"></i> 广告效果分析</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ad-chart" style="height: 250px;"></div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                广告点击转化率: <span id="ad-conversion-rate" class="fw-bold">0%</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card chart-card mt-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calendar-alt"></i> 月度趋势</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="monthly-trend" style="height: 200px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产品详细数据表 -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-table"></i> 产品详细数据</h5>
+                        <input type="text" class="form-control form-control-sm" id="search-product" 
+                               placeholder="搜索产品型号或名称..." style="width: 200px; display: inline;">
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>型号</th>
+                                        <th>商品名称</th>
+                                        <th>累计销售额</th>
+                                        <th>累计买家数</th>
+                                        <th>转化率</th>
+                                        <th>客单价</th>
+                                        <th>广告展现占比</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="product-table">
+                                    <!-- 动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>© 2023 德曼产品分析看板 | 数据更新至: <span id="update-date">2023年11月</span></p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-download"></i> 导出报表
+                    </a>
+                    <a href="#" class="btn btn-sm btn-outline-light ms-2">
+                        <i class="fas fa-sync-alt"></i> 刷新数据
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
