@@ -1,0 +1,191 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --light-bg: #f8f9fa;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color), #1a252f);
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.navbar-brand i {
+    margin-right: 10px;
+    color: var(--warning-color);
+}
+
+/* KPI卡片样式 */
+.kpi-card {
+    border: none;
+    border-radius: 10px;
+    background: white;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,.15);
+}
+
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--secondary-color);
+}
+
+.kpi-card:nth-child(2)::before { background: var(--success-color); }
+.kpi-card:nth-child(3)::before { background: var(--warning-color); }
+.kpi-card:nth-child(4)::before { background: var(--accent-color); }
+
+.card-title {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.card-value {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin: 10px 0;
+}
+
+.card-change {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* 图表卡片样式 */
+.chart-card {
+    border: none;
+    border-radius: 10px;
+    background: white;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+}
+
+.chart-card .card-header {
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-card .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.chart-card .card-header h5 i {
+    margin-right: 8px;
+    color: var(--secondary-color);
+}
+
+.chart-card .card-body {
+    padding: 20px;
+}
+
+/* 表格样式 */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 12px 15px;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* 页脚样式 */
+.footer {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+.footer a {
+    color: #bdc3c7;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .chart-card .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .chart-card .card-header .btn-group {
+        margin-top: 10px;
+    }
+    
+    .card-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
